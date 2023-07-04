@@ -6,7 +6,7 @@ namespace CobaltSharp;
 /// <summary>
 /// Object containing stream result
 /// </summary>
-public struct StreamResponse
+public struct StreamResponse : IDisposable
 {
     /// <summary>
     /// If the operation completed successfully or not
@@ -59,4 +59,6 @@ public struct StreamResponse
         Stream = s;
         FileName = fileName ?? (FileName = GenerateId(25));
     }
+
+    public void Dispose() => Stream?.Dispose();
 }

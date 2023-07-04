@@ -3,6 +3,11 @@
 using CobaltSharp;
 
 Cobalt cobalt = new Cobalt();
+#if ASYNC
+LogServerInfo(await cobalt.GetServerInfoAsync());
+#else
+LogServerInfo(cobalt.GetServerInfo());
+#endif
 GetMedia getMedia = PromptGetMedia();
 MediaResponse mediaResponse;
 #if ASYNC
@@ -61,6 +66,20 @@ else
     Console.WriteLine("Failed to GetMedia!");
     Console.WriteLine(mediaResponse.text);
     Console.ForegroundColor = ConsoleColor.White;
+}
+
+void LogServerInfo(ServerInfo serverInfo)
+{
+    Console.WriteLine("Server Info");
+    Console.WriteLine("=============================================================");
+    Console.WriteLine($"Version: {serverInfo.version}");
+    Console.WriteLine($"Commit: {serverInfo.commit}");
+    Console.WriteLine($"Branch: {serverInfo.branch}");
+    Console.WriteLine($"Name: {serverInfo.name}");
+    Console.WriteLine($"URL: {serverInfo.url}");
+    Console.WriteLine($"CORS: {serverInfo.cors}");
+    Console.WriteLine($"startTime: {serverInfo.startTime.ToLongDateString() + serverInfo.startTime.ToLongTimeString()}");
+    Console.WriteLine("=============================================================");
 }
 
 string SelectLanguage()

@@ -159,6 +159,36 @@ public class Cobalt : IDisposable
         return new OnDemandResponse(await responseMessage.Content.ReadAsStringAsync());
     }
 
+    public ServerInfo GetServerInfo()
+    {
+        Uri e = new Uri(_server.APIUri, "api/serverInfo");
+        string mt = "application/json";
+        HttpRequestMessage requestMessage = new HttpRequestMessage
+        {
+            RequestUri = e,
+            Method = HttpMethod.Get
+        };
+        requestMessage.Headers.Accept.Clear();
+        requestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mt));
+        HttpResponseMessage responseMessage = _httpClient.SendAsync(requestMessage).Result;
+        return new ServerInfo(responseMessage.Content.ReadAsStringAsync().Result);
+    }
+    
+    public async Task<ServerInfo> GetServerInfoAsync()
+    {
+        Uri e = new Uri(_server.APIUri, "api/serverInfo");
+        string mt = "application/json";
+        HttpRequestMessage requestMessage = new HttpRequestMessage
+        {
+            RequestUri = e,
+            Method = HttpMethod.Get
+        };
+        requestMessage.Headers.Accept.Clear();
+        requestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mt));
+        HttpResponseMessage responseMessage = await _httpClient.SendAsync(requestMessage);
+        return new ServerInfo(await responseMessage.Content.ReadAsStringAsync());
+    }
+
     private static string RemoveQuotes(string? fileName)
     {
         if(fileName == null)
