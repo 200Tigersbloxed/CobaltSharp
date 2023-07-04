@@ -7,7 +7,7 @@ namespace CobaltSharp;
 /// <summary>
 /// The main Object where Requests are Handled
 /// </summary>
-public class Cobalt
+public class Cobalt : IDisposable
 {
     private CobaltServer _server;
     private HttpClient _httpClient;
@@ -168,4 +168,6 @@ public class Cobalt
         ns = ns.Substring(0, ns.Length - 1);
         return ns;
     }
+
+    public void Dispose() => _httpClient.Dispose();
 }
