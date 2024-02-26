@@ -1,4 +1,5 @@
-﻿using CobaltSharp.Internals;
+﻿using System.Net.Http;
+using CobaltSharp.Internals;
 using SimpleJSON;
 
 namespace CobaltSharp;

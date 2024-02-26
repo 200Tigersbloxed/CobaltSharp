@@ -1,4 +1,6 @@
-﻿namespace CobaltSharp.Internals;
+﻿using System.Net.Http;
+
+namespace CobaltSharp.Internals;
 
 internal interface IAPIEndpoint
 {

@@ -92,7 +92,7 @@ Getting Media will return a [MediaResponse](https://github.com/200Tigersbloxed/C
 
 ## Streaming Media
 
-[GetStream](https://github.com/200Tigersbloxed/CobaltSharp/blob/main/CobaltSharp/GetStream.cs) downloads a Stream from a specified URL, usually from a MediaResponse. Using GetStream is optional, but recommended for Memory operations, or when you need a FileName. This example demonstrates how to download and save a Stream MediaResult to a file.
+The MediaResponse or PickerItem generated is where you can stream/download the media. This example demonstrates how to download and save a MediaResult to a file.
 
 ```cs
 /*
@@ -101,8 +101,7 @@ Getting Media will return a [MediaResponse](https://github.com/200Tigersbloxed/C
  * Assume a MediaResult exists and has a status of Status.Stream
 */
 
-GetStream getStream = new GetStream(mediaResponse);
-StreamResponse streamResponse = cobalt.GetStream(getStream);
+StreamResponse streamResponse = cobalt.GetStream(mediaResponse);
 if(streamResponse.status == null || streamResponse.status != Status.Success)
 {
     // Failed to get Stream

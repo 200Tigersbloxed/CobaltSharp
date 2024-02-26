@@ -7,9 +7,9 @@
         <LangVersion>11</LangVersion>
     </PropertyGroup>
 
-    <ItemGroup>
-      <Folder Include="Internals\SimpleJSON" />
-    </ItemGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DebugType>none</DebugType>
+    </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="System.Net.Http" Version="4.3.4" />

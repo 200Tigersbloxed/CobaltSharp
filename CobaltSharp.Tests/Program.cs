@@ -31,13 +31,14 @@ if (mediaResponse.status is Status.Success or Status.Stream)
     bool download = Console.ReadLine()?.ToLower() != "n";
     if (download)
     {
-        GetStream getStream = new GetStream(mediaResponse);
         StreamResponse streamResponse;
+        DateTime before = DateTime.Now;
 #if ASYNC
-        streamResponse = await cobalt.GetStreamAsync(getStream);
+        streamResponse = await cobalt.GetStreamAsync(mediaResponse);
 #else
-        streamResponse = cobalt.GetStream(getStream);
+        streamResponse = cobalt.GetStream(mediaResponse);
 #endif
+        TimeSpan after = DateTimeOffset.Now - before;
         if (streamResponse.status == null || streamResponse.status != Status.Success)
         {
             Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -48,7 +49,7 @@ if (mediaResponse.status is Status.Success or Status.Stream)
         else
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Got stream!");
+            Console.WriteLine($"Got stream! (Took {after.Milliseconds}ms)");
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine("Writing to " + streamResponse.FileName + "...");
             Console.ForegroundColor = ConsoleColor.DarkRed;

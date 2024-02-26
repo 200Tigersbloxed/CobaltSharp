@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using CobaltSharp.Internals;
 
@@ -71,18 +72,12 @@ public class Cobalt : IDisposable
         return new MediaResponse(await responseMessage.Content.ReadAsStringAsync());
     }
 
-    /// <summary>
-    /// Gets a StreamResponse that contains a Stream and FileName
-    /// </summary>
-    /// <param name="getStream"></param>
-    /// <returns></returns>
-    public StreamResponse GetStream(GetStream getStream)
+    private StreamResponse GetStream(string url)
     {
-        Uri e = new Uri(_server.APIUri, ((IAPIEndpoint) getStream).Endpoint);
         HttpRequestMessage requestMessage = new HttpRequestMessage
         {
-            RequestUri = e,
-            Method = ((IAPIEndpoint) getStream).Method
+            RequestUri = new Uri(url),
+            Method = HttpMethod.Get
         };
         HttpResponseMessage responseMessage = _httpClient.SendAsync(requestMessage).Result;
         StreamResponse streamResponse = new StreamResponse(responseMessage.Content.ReadAsStringAsync().Result);
@@ -91,19 +86,13 @@ public class Cobalt : IDisposable
         return new StreamResponse(responseMessage.Content.ReadAsStreamAsync().Result,
             RemoveQuotes(responseMessage.Content.Headers.ContentDisposition?.FileName));
     }
-    
-    /// <summary>
-    /// Asynchronously gets a StreamResponse that contains a Stream and FileName
-    /// </summary>
-    /// <param name="getStream"></param>
-    /// <returns></returns>
-    public async Task<StreamResponse> GetStreamAsync(GetStream getStream)
+
+    private async Task<StreamResponse> GetStreamAsync(string url)
     {
-        Uri e = new Uri(_server.APIUri, ((IAPIEndpoint) getStream).Endpoint);
         HttpRequestMessage requestMessage = new HttpRequestMessage
         {
-            RequestUri = e,
-            Method = ((IAPIEndpoint) getStream).Method
+            RequestUri = new Uri(url),
+            Method = HttpMethod.Get
         };
         HttpResponseMessage responseMessage = await _httpClient.SendAsync(requestMessage);
         StreamResponse streamResponse = new StreamResponse(await responseMessage.Content.ReadAsStringAsync());
@@ -112,6 +101,34 @@ public class Cobalt : IDisposable
         return new StreamResponse(await responseMessage.Content.ReadAsStreamAsync(),
             RemoveQuotes(responseMessage.Content.Headers.ContentDisposition?.FileName));
     }
+
+    /// <summary>
+    /// Gets a StreamResponse that contains a Stream and FileName
+    /// </summary>
+    /// <param name="mediaResponse"></param>
+    /// <returns></returns>
+    public StreamResponse GetStream(MediaResponse mediaResponse) => GetStream(mediaResponse.url!);
+    
+    /// <summary>
+    /// Gets a StreamResponse that contains a Stream and FileName
+    /// </summary>
+    /// <param name="pickerItem"></param>
+    /// <returns></returns>
+    public StreamResponse GetStream(PickerItem pickerItem) => GetStream(pickerItem.url);
+
+    /// <summary>
+    /// Asynchronously gets a StreamResponse that contains a Stream and FileName
+    /// </summary>
+    /// <param name="mediaResponse"></param>
+    /// <returns></returns>
+    public async Task<StreamResponse> GetStreamAsync(MediaResponse mediaResponse) => await GetStreamAsync(mediaResponse.url!);
+    
+    /// <summary>
+    /// Gets a StreamResponse that contains a Stream and FileName
+    /// </summary>
+    /// <param name="pickerItem"></param>
+    /// <returns></returns>
+    public async Task<StreamResponse> GetStreamAsync(PickerItem pickerItem) => await GetStreamAsync(pickerItem.url);
     
     /// <summary>
     /// Gets the On-demand website element loading. Useless without an HTML Parser/Renderer.
