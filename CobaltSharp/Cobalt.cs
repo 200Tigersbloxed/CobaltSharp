@@ -83,6 +83,15 @@ public class Cobalt : IDisposable
         StreamResponse streamResponse = new StreamResponse(responseMessage.Content.ReadAsStringAsync().Result);
         if (streamResponse.status != null)
             return streamResponse;
+        if (responseMessage.Content.Headers.ContentDisposition == null)
+        {
+            Uri? uri = responseMessage.RequestMessage?.RequestUri;
+            if (uri == null)
+                return new StreamResponse(responseMessage.Content.ReadAsStreamAsync().Result, Guid.NewGuid().ToString());
+            string fileName = Path.GetFileName(uri.AbsolutePath);
+            Console.WriteLine(fileName);
+            return new StreamResponse(responseMessage.Content.ReadAsStreamAsync().Result, fileName);
+        }
         return new StreamResponse(responseMessage.Content.ReadAsStreamAsync().Result,
             RemoveQuotes(responseMessage.Content.Headers.ContentDisposition?.FileName));
     }
@@ -98,6 +107,15 @@ public class Cobalt : IDisposable
         StreamResponse streamResponse = new StreamResponse(await responseMessage.Content.ReadAsStringAsync());
         if (streamResponse.status != null)
             return streamResponse;
+        if (responseMessage.Content.Headers.ContentDisposition == null)
+        {
+            Uri? uri = responseMessage.RequestMessage?.RequestUri;
+            if (uri == null)
+                return new StreamResponse(await responseMessage.Content.ReadAsStreamAsync(), Guid.NewGuid().ToString());
+            string fileName = Path.GetFileName(uri.AbsolutePath);
+            Console.WriteLine(fileName);
+            return new StreamResponse(await responseMessage.Content.ReadAsStreamAsync(), fileName);
+        }
         return new StreamResponse(await responseMessage.Content.ReadAsStreamAsync(),
             RemoveQuotes(responseMessage.Content.Headers.ContentDisposition?.FileName));
     }

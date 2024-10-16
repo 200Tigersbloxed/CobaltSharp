@@ -15,7 +15,7 @@ mediaResponse = await cobalt.GetMediaAsync(getMedia);
 #else
 mediaResponse = cobalt.GetMedia(getMedia);
 #endif
-if (mediaResponse.status is Status.Success or Status.Stream)
+if (mediaResponse.status is Status.Success or Status.Stream or Status.Redirect)
 {
     if (mediaResponse.status == Status.Success)
     {
