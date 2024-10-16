@@ -5,7 +5,7 @@
 /// </summary>
 public struct CobaltServer
 {
-    private const string DEFAULT_API = "https://co.wuk.sh/";
+    private const string DEFAULT_API = "https://api.cobalt.tools/";
     /// <summary>
     /// The API's Uri
     /// </summary>
